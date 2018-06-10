@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Mucic</title>
+  <style type="text/css">
+    body{
+      width: 100%;
+    }
+    *:not(input){
+      margin: 10px auto;
+      width: 1200px;
+    }
+    textarea{
+      min-height: 200px;
+    }
+  </style>
+</head>
+<body>
+  <audio controls="yes" id="audio" autoplay="yes"></audio><br>
+  <input type="file" id="files" name="files[]" multiple /><br>
+<input type="file" id="fileUpload" webkitdirectory mozdirectory msdirectory odirectory directory multiple />
+  <textarea id="textarea"></textarea><br>
+  <input type="button" value="showList" id="showList">
+  <input type="button" value="readFile" id="readFile">
+
+<script>
+  var files = [];
+  var audio = document.getElementById("audio");
+  var files = document.getElementById("files");
+  var fileUpload = document.getElementById("fileUpload");
+  var textarea = document.getElementById("textarea");
+  var btnShowList = document.getElementById("showList");
+  var btnReadFile = document.getElementById("readFile");
+
+  files.addEventListener('change', loadFiles, false);
+  fileUpload.addEventListener('change', loadFiles, false);
+  btnShowList.addEventListener('click',showList,false);
+  btnReadFile.addEventListener('click',readFile,true);
+
+
+
+
+  function loadFiles(evt) {
+    files = evt.target.files;
+  }
+  
+
+
+  function showList(){
+    for (var i = files.length - 1,f; i >= 0,f=files[i]; i--) {
+      textarea.value +=f.size + "\t\t" + f.name+"\n";
+    }
+  }
+
+var i = 0;
+var audioData;
+
+  function readFile(){
+    var file = files[0];
+    console.log(file.size);
+    var start = i*1024000;
+    var end = start + 1024000;
+    if(end>file.size)
+      end = file.size;
+    var blob = file.slice(start, end);
+    console.log(start,end);
+    i++;
+
+    var reader = new FileReader();
+
+    reader.onload = (function(theFile) {
+        return function(e) {
+          //var source = document.createElement("source");
+          //source.setAttribute("type","audio/mpeg");
+         audioData=e.target.result;
+         //console.log(audioData);
+          //audio.setAttribute("src",e.target.result);
+        };
+      })(file);
+
+    reader.readAsDataURL(blob);
+    audioData = "data:" + file.type + audioData.substring(5, audioData.length);
+    //console.log(audioData);
+    audio.setAttribute("src",audioData);
+    //textarea.value+=audioData+"\n";
+
+  }
+
+
+
+</script>
+
+</body>
+</html>

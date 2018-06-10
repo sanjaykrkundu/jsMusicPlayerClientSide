@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Mucic</title>
+  <style type="text/css">
+    body{
+      width: 100%;
+    }
+    *:not(input){
+      margin: 10px auto;
+      width: 1200px;
+    }
+    textarea{
+      min-height: 200px;
+    }
+  </style>
+</head>
+<body>
+  <audio controls="yes" id="audio" autoplay="yes"></audio><br>
+  <input type="file" id="files" name="files[]" multiple /><br>
+  <textarea id="textarea"></textarea><br>
+  <input type="button" value="readID3" id="readID3">
+
+<script>
+  var files = [];
+  var audio = document.getElementById("audio");
+  var files = document.getElementById("files");
+  var textarea = document.getElementById("textarea");
+  var btnreadID3 = document.getElementById("readID3");
+
+  files.addEventListener('change', loadFiles, false);
+  btnreadID3.addEventListener('click',readFile,false);
+
+
+
+
+  function loadFiles(evt) {
+    files = evt.target.files;
+  }
+  
+  function readFile(){
+    var file = files[0];
+
+    var blob = file.slice(0, 8);
+
+    var reader = new FileReader();
+
+    reader.onload = (function(theFile) {
+        return function(e) {
+          var abc = e.target.result;
+          console.log(abc);
+          for (var i = abc.length - 1; i >= 0; i--) {
+            console.log(i + " " + abc[i] + " " +abc.charCodeAt(i));
+          }
+
+          console.log(abc.charCodeAt(7) * 8)
+
+        };
+      })(file);
+
+    //reader.readAsDataURL(blob);
+    reader.readAsBinaryString(blob);
+
+  }
+
+
+
+</script>
+
+</body>
+</html>
